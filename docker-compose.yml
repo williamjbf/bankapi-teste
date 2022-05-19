@@ -1,13 +1,15 @@
 version: '3'
 services:
   database:
-    container_name: database
-    image: bankapi/database:1
-    build: ./database
+    image: postgis/postgis
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - "dbdata:/var/lib/postgresql/data"
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
   app:
     container_name: app
     image: bankapi/app:1
@@ -16,8 +18,9 @@ services:
       - "8080:8080"
     depends_on:
       - database
-    links:
-      - "database:host-database"
+#    'database' is replaced by database container ip
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/${DATABASE_NAME}
 volumes:
   dbdata:
     driver: local
