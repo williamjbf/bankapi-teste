@@ -1,0 +1,23 @@
+version: '3'
+services:
+  database:
+    container_name: database
+    image: bankapi/database:1
+    build: ./database
+    ports:
+      - "5433:5432"
+    volumes:
+      - "dbdata:/var/lib/postgresql/data"
+  app:
+    container_name: app
+    image: bankapi/app:1
+    build: ./app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    links:
+      - "database:host-database"
+volumes:
+  dbdata:
+    driver: local

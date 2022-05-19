@@ -1,0 +1,4 @@
+FROM postgis/postgis
+ENV POSTGRES_DB bankapi
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD postgres
